@@ -61,7 +61,7 @@ public class StoreUtils {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         String[] basket = new String[0];
-        log.info("Create list of product (A, B, C, D)");
+        log.info("Create list of products (A, B, C, D)");
         try {
             basket = bufferedReader.readLine().split("");
         } catch (IOException e) {
@@ -88,6 +88,30 @@ public class StoreUtils {
             bufferedReader.close();
         } catch (IOException e) {
             e.getMessage();
+        }
+        return cheque;
+    }
+
+    public List<Product> generateChequeByString(String str) {
+        List<Product> cheque = new ArrayList<>();
+        String[] basket = str.toUpperCase().split("");
+        log.info("Create list of product (A, B, C, D)");
+
+        for (String product : basket) {
+            switch (product.toUpperCase()) {
+                case "A":
+                    cheque.add(productA);
+                    break;
+                case "B":
+                    cheque.add(productB);
+                    break;
+                case "C":
+                    cheque.add(productC);
+                    break;
+                case "D":
+                    cheque.add(productD);
+                    break;
+            }
         }
         return cheque;
     }
