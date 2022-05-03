@@ -33,7 +33,7 @@ public class StoreUtils {
                 .collect(Collectors.summingDouble(Double::doubleValue));
     }
 
-    public static double getProductTotalSum(Product product, long count) {
+    private double getProductTotalSum(Product product, long count) {
         double result = 0;
 
         if (product.discountQuantity != 0) {
@@ -46,7 +46,7 @@ public class StoreUtils {
     }
 
     //generates random client's basket
-    public  List<Product> generateRandomCheque(int count) {
+    public List<Product> generateRandomCheque(int count) {
         List<Product> assortment = List.of(productA, productB, productC, productD);
         List<Product> cheque = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -61,7 +61,7 @@ public class StoreUtils {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         String[] basket = new String[0];
-        log.info("Create list of products (A, B, C, D)");
+        log.info("Create your own list of product out of A, B, C, D.\nInput the name of a product: ");
         try {
             basket = bufferedReader.readLine().split("");
         } catch (IOException e) {
@@ -95,7 +95,7 @@ public class StoreUtils {
     public List<Product> generateChequeByString(String str) {
         List<Product> cheque = new ArrayList<>();
         String[] basket = str.toUpperCase().split("");
-        log.info("Create list of product (A, B, C, D)");
+        log.info("Create your own list of product (A, B, C, D)\nInput the name of a product");
 
         for (String product : basket) {
             switch (product.toUpperCase()) {

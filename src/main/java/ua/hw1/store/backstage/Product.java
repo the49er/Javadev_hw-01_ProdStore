@@ -7,8 +7,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Product {
-    String productName;
-    double regularPrice;
-    int discountQuantity;
-    double discountPrice;
+    public String productName;
+    public double regularPrice;
+    public int discountQuantity;
+    public double discountPrice;
 }
