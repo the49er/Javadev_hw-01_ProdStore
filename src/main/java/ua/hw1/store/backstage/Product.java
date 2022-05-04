@@ -7,6 +7,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Product {
+    //is the any reason to use public access type here instead of private?
     public String productName;
     public double regularPrice;
     public int discountQuantity;

@@ -36,7 +36,10 @@ public class StoreUtils {
     private double getProductTotalSum(Product product, long count) {
         double result = 0;
 
+        //don't call the variables directly, it's an unsafe approach
         if (product.discountQuantity != 0) {
+            //first of all, will nice to use () in those expressions to do them more readable
+            //I also suggest extracting it to a separate private method with a meaningful name
             result = count / product.discountQuantity * product.discountPrice + count % product.discountQuantity * product.regularPrice;
         } else {
             result = count * product.regularPrice;
@@ -44,6 +47,8 @@ public class StoreUtils {
         log.info("Total cost of product " + product.productName + " is " + result);
         return result;
     }
+
+    //we don't have to explain what the method do in a comment. It should be clear enough from the method name
 
     //generates random client's basket
     public List<Product> generateRandomCheque(int count) {
@@ -54,6 +59,8 @@ public class StoreUtils {
         }
         return cheque;
     }
+
+    //here the same
 
     //generates client's basket
     public List<Product> generateCheque() {
@@ -85,6 +92,8 @@ public class StoreUtils {
             }
         }
         try {
+            //is a good idea to close the stream in try block?
+            //Do we have any way to be 100% sure that the stream will be closed?
             bufferedReader.close();
         } catch (IOException e) {
             e.getMessage();
@@ -92,6 +101,8 @@ public class StoreUtils {
         return cheque;
     }
 
+    //the method we use only in the test class.
+    //We don't need to create any method for the test, we have to test our methods that contains our business logic
     public List<Product> generateChequeByString(String str) {
         List<Product> cheque = new ArrayList<>();
         String[] basket = str.toUpperCase().split("");
@@ -116,6 +127,10 @@ public class StoreUtils {
         return cheque;
     }
 }
+
+// here is absolutely no reason keep the commented code here
+// if code is unused it should be deleted in the final version of your application
+
 
 //    double resA = productA.regularPrice * res.get(productA) * 100 / 100;
 //        log.info(productA.productName + " | price: " + productA.regularPrice + " * quantity: " + res.get(productA) + " = sum: " + String.valueOf(resA));

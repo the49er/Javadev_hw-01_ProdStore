@@ -8,6 +8,12 @@ import org.junit.jupiter.api.Assertions;
 import java.util.List;
 
 @Slf4j
+// In general, you shouldn't explain each test case in a comment it should be clear enough from the test name
+//also it is nice to use some suffix like "test" in those names like generateChequeByStringTest()
+//prefix "is" uses for boolean expression regarding the name convention
+
+// Also it would be nice add several components(classes) into the application and try to use Mockito
+//it's important and very useful tool, you have to practice with it
 public class StoreUtilsTest {
     StoreUtils storeUtils;
     String productListABCD;
@@ -49,6 +55,7 @@ public class StoreUtilsTest {
 
     @Test
     public void isCalculatedTotalCostForEmptyBasket() { //test for empty basket
+        //you can use assertFalse() here
         Assertions.assertEquals(true, storeUtils.generateRandomCheque(0).isEmpty());
         Assertions.assertEquals(0.00, storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListEmpty)));
         log.info("testOfEmptyBasket");
@@ -56,7 +63,8 @@ public class StoreUtilsTest {
 
     @Test
     public void isGenerateRandomCheque() { //test of random generated cheque
-        Assertions.assertEquals(false, storeUtils.generateRandomCheque(10).isEmpty());
+        //you can use assertFalse() here
+         Assertions.assertEquals(false, storeUtils.generateRandomCheque(10).isEmpty());
         Assertions.assertEquals(10, storeUtils.generateRandomCheque(10).size());
         log.info("testOfRandomCheque");
     }
