@@ -1,6 +1,7 @@
 package ua.hw1.store.backstage;
 
 import lombok.extern.slf4j.Slf4j;
+import ua.hw1.store.db.DbUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,15 +17,17 @@ import static java.util.stream.Collectors.groupingBy;
 
 @Slf4j
 public class StoreUtils {
-    public Product productA = new Product("A", 1.35, 3, 3.00);
-    public Product productB = new Product("B", 4.25, 0, 0.00);
-    public Product productC = new Product("C", 1.00, 6, 5.00);
-    public Product productD = new Product("D", 0.75, 0, 0.00);
 
+    DbUtils dbUtils = new DbUtils();
 
     public double calculateTotalCost(List<Product> cheque) {
+        StringBuffer sb = new StringBuffer();
+        for (Product product : cheque) {
+            sb.append(product.getProductName());
+        }
+        String res = sb.toString();
+        log.info("Total cost of cheque " + res + " has been counted");
 
-        log.info("Total cost has been counted");
         return cheque.stream()
                 .collect(groupingBy(Function.identity(), counting()))
                 .entrySet()
@@ -34,29 +37,27 @@ public class StoreUtils {
     }
 
     private double getProductTotalSum(Product product, long count) {
-        double result = 0;
+        double result;
 
-        if (product.discountQuantity != 0) {
-            result = count / product.discountQuantity * product.discountPrice + count % product.discountQuantity * product.regularPrice;
+        if (isDiscountQuantityNull(product)) {
+            result = count / product.getDiscountQuantity() * product.getDiscountPrice() + count % product.getDiscountQuantity() * product.getRegularPrice();
         } else {
-            result = count * product.regularPrice;
+            result = count * product.getRegularPrice();
         }
-        log.info("Total cost of product " + product.productName + " is " + result);
+        log.info("Total cost of product " + product.getProductName() + " is " + result);
         return result;
     }
 
-    //generates random client's basket
-    public List<Product> generateRandomCheque(int count) {
-        List<Product> assortment = List.of(productA, productB, productC, productD);
-        List<Product> cheque = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            cheque.add(assortment.get(new Random().nextInt(assortment.size())));
+    private boolean isDiscountQuantityNull (Product product) {
+        boolean result = false;
+        if (product.getDiscountQuantity() != 0){
+            result = true;
         }
-        return cheque;
+        return result;
     }
 
-    //generates client's basket
-    public List<Product> generateCheque() {
+
+    public List<Product> generateCheque() throws IOException {
         List<Product> cheque = new ArrayList<>();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -71,24 +72,20 @@ public class StoreUtils {
         for (String product : basket) {
             switch (product.toUpperCase()) {
                 case "A":
-                    cheque.add(productA);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(0));
                     break;
                 case "B":
-                    cheque.add(productB);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(1));
                     break;
                 case "C":
-                    cheque.add(productC);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(2));
                     break;
                 case "D":
-                    cheque.add(productD);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(3));
                     break;
             }
         }
-        try {
-            bufferedReader.close();
-        } catch (IOException e) {
-            e.getMessage();
-        }
+        bufferedReader.close();
         return cheque;
     }
 
@@ -100,78 +97,19 @@ public class StoreUtils {
         for (String product : basket) {
             switch (product.toUpperCase()) {
                 case "A":
-                    cheque.add(productA);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(0));
                     break;
                 case "B":
-                    cheque.add(productB);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(1));
                     break;
                 case "C":
-                    cheque.add(productC);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(2));
                     break;
                 case "D":
-                    cheque.add(productD);
+                    cheque.add(dbUtils.getListOfProductFromDb().get(3));
                     break;
             }
         }
         return cheque;
     }
 }
-
-//    double resA = productA.regularPrice * res.get(productA) * 100 / 100;
-//        log.info(productA.productName + " | price: " + productA.regularPrice + " * quantity: " + res.get(productA) + " = sum: " + String.valueOf(resA));
-//        double resB = productB.regularPrice * res.get(productB) * 100 / 100;
-//        log.info(productB.productName + " | price: " + productB.regularPrice + " * quantity: " + res.get(productB) + " = sum: " + String.valueOf(resB));
-//        double resC = productC.regularPrice * res.get(productC) * 100 / 100;
-//        log.info(productC.productName + " | price: " + productC.regularPrice + "  * quantity: " + res.get(productC) + " = sum: " + String.valueOf(resC));
-//        double resD = productD.regularPrice * res.get(productD) * 100 / 100;
-//        log.info(productD.productName + " | price: " + productD.regularPrice + " * quantity: " + res.get(productD) + " = sum: " + String.valueOf(resD));
-//        double sum = resA + resB + resC + resD;
-//        log.info(String.valueOf(resA + " + " + resB + " + " + resC + " + " + resD + " = " + sum));
-
-
-//    int quantityProductA = 0;
-//        int quantityProductB = 0;
-//        int quantityProductC = 0;
-//        int quantityProductD = 0;
-//
-//        for (Product product : cheque) {
-//            switch (product.productName) {
-//                case "A":
-//                    quantityProductA++;
-//                    break;
-//                case "B":
-//                    quantityProductB++;
-//                    break;
-//                case "C":
-//                    quantityProductC++;
-//                    break;
-//                case "D":
-//                    quantityProductD++;
-//                    break;
-//            }
-//        }
-
-//        System.out.println("res.values() = " + res.values());
-//        double resA = productA.regularPrice * res.get(productA) * 100 / 100;
-//        log.info(productA.productName + " | price: " + productA.regularPrice + " * quantity: " + res.get(productA) + " = sum: " + String.valueOf(resA));
-//        double resB = productB.regularPrice * res.get(productB) * 100 / 100;
-//        log.info(productB.productName + " | price: " + productB.regularPrice + " * quantity: " + res.get(productB) + " = sum: " + String.valueOf(resB));
-//        double resC = productC.regularPrice * res.get(productC) * 100 / 100;
-//        log.info(productC.productName + " | price: " + productC.regularPrice + "  * quantity: " + res.get(productC) + " = sum: " + String.valueOf(resC));
-//        double resD = productD.regularPrice * res.get(productD) * 100 / 100;
-//        log.info(productD.productName + " | price: " + productD.regularPrice + " * quantity: " + res.get(productD) + " = sum: " + String.valueOf(resD));
-//        double sum = resA + resB + resC + resD;
-//        log.info(String.valueOf(resA + " + " + resB + " + " + resC + " + " + resD + " = " + sum));
-//
-//
-//        System.out.println("res = " + res);
-//
-////            for (Map.Entry<Product, Long> item: res.entrySet()) {
-////                totalCost += getProductTotalSum(item.getKey(), item.getValue());
-////            }
-//
-//        totalCost = res.entrySet().stream()
-//                .map(n -> getProductTotalSum(n.getKey(), n.getValue()))
-//                .collect(Collectors.summingDouble(Double::doubleValue));
-
-

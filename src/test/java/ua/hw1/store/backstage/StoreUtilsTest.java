@@ -1,64 +1,79 @@
 package ua.hw1.store.backstage;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import ua.hw1.store.Store;
+import ua.hw1.store.db.DbUtils;
 
-import java.util.List;
 
 @Slf4j
 public class StoreUtilsTest {
     StoreUtils storeUtils;
+    DbUtils dbUtils;
     String productListABCD;
-    String productListAAAA;
-    String productListCCCC;
-    String productListEmpty;
+    String productListA;
+    String productListC;
+    String productListEmpty = "";
 
     @Before
     public void setUp() {
-        storeUtils = new StoreUtils();
-        productListABCD = "ABcd";
-        productListAAAA = "AaAA";
-        productListCCCC = "cccccCc";
-        productListEmpty = "";
+        this.dbUtils = new DbUtils();
+        this.storeUtils = new StoreUtils();
+        this.productListABCD = "ABcd";
+        this.productListA = "AaAA";
+        this.productListC = "cccccCc";
+    }
+
+
+    @Test
+    public void doChequeGenerateFromStringTest() {
+        Assertions.assertEquals(dbUtils.getListOfProductFromDb(),
+                storeUtils.generateChequeByString(productListABCD));
+        log.info("Test to generate cheque from a string");
     }
 
     @Test
-    public void isGenerateChequeByString() { // test to generate basket
-        Assertions.assertEquals(List.of(storeUtils.productA, storeUtils.productB, storeUtils.productC, storeUtils.productD), storeUtils.generateChequeByString(productListABCD));
+    public void doTotalCostOfABCDProductListCalculateTest() { //cheque "ABCD"
+        Assertions.assertEquals(7.35,
+                storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListABCD)));
+        log.info("Calculation test of: " + productListABCD);
     }
 
     @Test
-    public void isCalculatedTotalCostForABCD() { //test for basket "ABCD"
-        Assertions.assertEquals(7.35, storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListABCD)));
-        log.info("testOfABCD");
+    public void doTotalCostOfAProductListCalculateTest() { //cheque "AAAA"
+        Assertions.assertEquals(4.35,
+                storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListA)));
+        log.info("Calculation test of: " + productListA);
     }
 
     @Test
-    public void isCalculatedTotalCostFor4A() { //test for basket "AAAA"
-        Assertions.assertEquals(4.35, storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListAAAA)));
-        log.info("testOf4A");
+    public void doTotalCostOfCProductListCalculateTest() { //cheque "CCCCCCC"
+        Assertions.assertEquals(6.00,
+                storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListC)));
+        log.info("test of: " + productListC);
     }
 
     @Test
-    public void isCalculatedTotalCostFor7C() { //test for basket "CCCCCCC"
-        Assertions.assertEquals(6.00, storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListCCCC)));
-        log.info("testOf7C");
+    public void doTotalCostOfEmptyBasketCalculateTest() { //test for empty basket
+        Assertions.assertEquals(true, new Store().generateRandomCheque(0).isEmpty());
+        Assertions.assertEquals(0.00,
+                storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListEmpty)));
+        log.info("calculationTestOfEmptyBasket");
     }
 
     @Test
-    public void isCalculatedTotalCostForEmptyBasket() { //test for empty basket
-        Assertions.assertEquals(true, storeUtils.generateRandomCheque(0).isEmpty());
-        Assertions.assertEquals(0.00, storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListEmpty)));
-        log.info("testOfEmptyBasket");
+    public void isCalculatedTotalCostForEmptyBasketTest() {
+        Assert.assertFalse(!new Store().generateRandomCheque(0).isEmpty());
+        log.info("booleanTestOfEmptyBasketIsFalse");
     }
 
     @Test
-    public void isGenerateRandomCheque() { //test of random generated cheque
-        Assertions.assertEquals(false, storeUtils.generateRandomCheque(10).isEmpty());
-        Assertions.assertEquals(10, storeUtils.generateRandomCheque(10).size());
-        log.info("testOfRandomCheque");
+    public void isGeneratedRandomChequeTest() {
+        Assert.assertFalse(new Store().generateRandomCheque(10).isEmpty());
+        log.info("booleanTestOfRandomChequeIsFalse");
     }
 
 }

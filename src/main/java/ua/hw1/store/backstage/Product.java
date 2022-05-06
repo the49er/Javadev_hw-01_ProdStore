@@ -1,14 +1,16 @@
 package ua.hw1.store.backstage;
-import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@AllArgsConstructor
+@Data
 @EqualsAndHashCode
 @ToString
 public class Product {
-    public String productName;
-    public double regularPrice;
-    public int discountQuantity;
-    public double discountPrice;
+    private int id;
+    private String productName;
+    private double regularPrice;
+    private int discountQuantity;
+    private double discountPrice;
+
 }
