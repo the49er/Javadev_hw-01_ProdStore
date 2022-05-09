@@ -12,6 +12,7 @@ import ua.hw1.store.db.DbUtils;
 @Slf4j
 public class StoreUtilsTest {
     StoreUtils storeUtils;
+    // Here we have mock the DbUtils as internal dependency. I'll add a small example
     DbUtils dbUtils;
     String productListABCD;
     String productListA;
@@ -66,6 +67,8 @@ public class StoreUtilsTest {
 
     @Test
     public void isCalculatedTotalCostForEmptyBasketTest() {
+        //please read about the keyWord static. We have to use it very carefully,
+        // but if you use the static state you don't need to create an object
         Assert.assertFalse(!new Store().generateRandomCheque(0).isEmpty());
         log.info("booleanTestOfEmptyBasketIsFalse");
     }

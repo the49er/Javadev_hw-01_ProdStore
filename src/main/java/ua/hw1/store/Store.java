@@ -27,6 +27,7 @@ public class Store {
     }
 
     public static List<Product> generateRandomCheque(int count) {
+        //why are you using new DbUtils() when we already created DbUtils object?
         List<Product> assortment = new DbUtils().getListOfProductFromDb();
         List<Product> cheque = new ArrayList<>();
         for (int i = 0; i < count; i++) {
