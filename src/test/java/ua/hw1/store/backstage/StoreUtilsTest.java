@@ -5,15 +5,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.Mock;
 import ua.hw1.store.Store;
 import ua.hw1.store.db.DbUtils;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @Slf4j
 public class StoreUtilsTest {
     StoreUtils storeUtils;
     // Here we have mock the DbUtils as internal dependency. I'll add a small example
-    DbUtils dbUtils;
+    @Mock
+    DbUtils mockDbutils;
+    @Mock StoreUtils mockStoreUtils;
     String productListABCD;
     String productListA;
     String productListC;
@@ -21,25 +28,31 @@ public class StoreUtilsTest {
 
     @Before
     public void setUp() {
-        this.dbUtils = new DbUtils();
+        this.mockDbutils = mock(DbUtils.class);
         this.storeUtils = new StoreUtils();
+        this.mockStoreUtils = mock(StoreUtils.class);
         this.productListABCD = "ABcd";
         this.productListA = "AaAA";
         this.productListC = "cccccCc";
     }
 
-
     @Test
     public void doChequeGenerateFromStringTest() {
-        Assertions.assertEquals(dbUtils.getListOfProductFromDb(),
+        when(mockDbutils.getListOfProductFromDb()).thenReturn(storeUtils.generateChequeByString(productListABCD));
+        Assertions.assertEquals(mockDbutils.getListOfProductFromDb(),
                 storeUtils.generateChequeByString(productListABCD));
         log.info("Test to generate cheque from a string");
+        verify(mockDbutils, times(1)).getListOfProductFromDb();
     }
+
 
     @Test
     public void doTotalCostOfABCDProductListCalculateTest() { //cheque "ABCD"
+        when(mockStoreUtils.calculateTotalCost(mockStoreUtils.generateChequeByString(productListABCD))).thenReturn(7.35);
         Assertions.assertEquals(7.35,
-                storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListABCD)));
+                mockStoreUtils.calculateTotalCost(mockStoreUtils.generateChequeByString(productListABCD)));
+
+        verify(mockStoreUtils, times(2)).calculateTotalCost(mockStoreUtils.generateChequeByString(productListABCD));
         log.info("Calculation test of: " + productListABCD);
     }
 
@@ -58,7 +71,7 @@ public class StoreUtilsTest {
     }
 
     @Test
-    public void doTotalCostOfEmptyBasketCalculateTest() { //test for empty basket
+    public void doTotalCostOfEmptyBasketCalculateTest() { //test of empty basket
         Assertions.assertEquals(true, new Store().generateRandomCheque(0).isEmpty());
         Assertions.assertEquals(0.00,
                 storeUtils.calculateTotalCost(storeUtils.generateChequeByString(productListEmpty)));
@@ -67,15 +80,13 @@ public class StoreUtilsTest {
 
     @Test
     public void isCalculatedTotalCostForEmptyBasketTest() {
-        //please read about the keyWord static. We have to use it very carefully,
-        // but if you use the static state you don't need to create an object
-        Assert.assertFalse(!new Store().generateRandomCheque(0).isEmpty());
+        Assert.assertFalse(!Store.generateRandomCheque(0).isEmpty());
         log.info("booleanTestOfEmptyBasketIsFalse");
     }
 
     @Test
     public void isGeneratedRandomChequeTest() {
-        Assert.assertFalse(new Store().generateRandomCheque(10).isEmpty());
+        Assert.assertFalse(Store.generateRandomCheque(10).isEmpty());
         log.info("booleanTestOfRandomChequeIsFalse");
     }
 

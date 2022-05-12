@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,6 +46,7 @@ public class StoreUtils {
         log.info("Total cost of product " + product.getProductName() + " is " + result);
         return result;
     }
+
 
     private boolean isDiscountQuantityNull (Product product) {
         boolean result = false;

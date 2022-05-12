@@ -1,20 +1,12 @@
 package ua.hw1.store.db;
-import com.mysql.cj.jdbc.NonRegisteringDriver;
-import lombok.AllArgsConstructor;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.SneakyThrows;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Slf4j
 @Data

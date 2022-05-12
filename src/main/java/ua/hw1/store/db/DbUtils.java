@@ -1,9 +1,8 @@
 package ua.hw1.store.db;
 
-import lombok.Getter;
+
 import lombok.extern.slf4j.Slf4j;
 import ua.hw1.store.backstage.Product;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@Getter
 public class DbUtils {
 
     public List<Product> getListOfProductFromDb() {
-        String query = "select * from products";
+        String query = "select id, product_name, regular_price, discount_quantity, discount_price from products";
 
         List<Product> productList = new ArrayList<>();
         Db db = new Db();
